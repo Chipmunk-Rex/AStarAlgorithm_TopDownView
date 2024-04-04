@@ -50,6 +50,9 @@ public class AStar
     }
     
     public void SetMap(Vector2Int mapXYMinPos, Vector2Int mapXYMaxPos, string layerName){
+        if(aStarMap==null){
+            Debug.Log("맵 설정이 안되어있습니다. : AStarAlgorithm");
+        }
         this.buttomLeftPos = mapXYMinPos;
         this.topRightPos = mapXYMaxPos;
         aStarmapSizeX = mapXYMaxPos.x -mapXYMinPos.x + 1;
