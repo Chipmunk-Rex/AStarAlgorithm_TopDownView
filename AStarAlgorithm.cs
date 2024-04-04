@@ -1,4 +1,4 @@
-`       using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
@@ -24,7 +24,7 @@ public class AStarNode
 public class AStar
 {
     public Vector2Int buttomLeftPos,topRightPos,startPos,targetPos;
-        [SerializeField] public List<AStarNode> path;
+        [SerializeField] public List<Vector2Int> path;
     int aStarmapSizeX, aStarmapSizeY;
     AStarNode[,] aStarMap;
     AStarNode startNode, endNode,curNode;
@@ -36,7 +36,7 @@ public class AStar
         aStarmapSizeY = mapXYMaxPos.y -mapXYMinPos.y + 1;
         aStarMap = new AStarNode[aStarmapSizeX,aStarmapSizeY];
 
-        for(int x = 0; x < aStarmapSizeX; x++){//aStarMap(AstarNode의 2차원 배열)에 각각의 좌표에 노드 생성(통과 가능 감지)
+        for(int x = 0; x < aStarmapSizeX; x++){
             for(int y = 0; y < aStarmapSizeY; y++){
                 bool isCanPass = true;
             foreach(Collider2D collider2D in Physics2D.OverlapCircleAll(new Vector2(x + mapXYMinPos.x, y + mapXYMinPos.y),0.1f)){
@@ -76,7 +76,7 @@ public class AStar
         aStarmapSizeY = mapXYMaxPos.y -mapXYMinPos.y + 1;
         aStarMap = new AStarNode[aStarmapSizeX,aStarmapSizeY];
 
-        for(int x = 0; x < aStarmapSizeX; x++){//aStarMap(AstarNode의 2차원 배열)에 각각의 좌표에 노드 생성(통과 가능 감지)
+        for(int x = 0; x < aStarmapSizeX; x++){
             for(int y = 0; y < aStarmapSizeY; y++){
                 bool isCanPass = true;
             foreach(Collider2D collider2D in Physics2D.OverlapCircleAll(new Vector2(x + mapXYMinPos.x, y + mapXYMinPos.y),objectRadius)){
@@ -109,12 +109,12 @@ public class AStar
         }
     }
 
-    public List<AStarNode> FindPath(Vector2Int start,Vector2Int end){
+    public List<Vector2Int> FindPath(Vector2Int start,Vector2Int end){
         startNode = aStarMap[start.x - buttomLeftPos.x,start.y - buttomLeftPos.y];
         endNode = aStarMap[end.x - buttomLeftPos.x, end.y - buttomLeftPos.y];
         openList = new List<AStarNode>(){startNode};
         closeList = new List<AStarNode>();
-        path = new List<AStarNode>();
+        path = new List<Vector2Int>();
         while(openList.Count > 0){
             curNode = openList[0];
             for(int openListCounter = 1; openListCounter < openList.Count; openListCounter++){
@@ -128,10 +128,10 @@ public class AStar
             if(curNode == endNode){
             AStarNode curEndNode = curNode;
             while(curEndNode != startNode){
-                path.Add(curEndNode);
+                path.Add(curEndNode.worldPosition);
                 curEndNode = curEndNode.parentNode;
             }
-            path.Add(startNode);
+            path.Add(startNode.worldPosition);
             path.Reverse();
             return path;
             }
