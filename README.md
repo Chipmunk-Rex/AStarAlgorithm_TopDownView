@@ -21,12 +21,12 @@
     3. AStar (원하는 변수이름) = new AStar();로 AStar클래스 객체 생성
 
     4. 맵 설정 방법
-      SetMap 메소드 사용
+      AStar 클래스의 SetMap 메소드 사용
         사용방법 :
             (3번에서 생성한 변수이름).SetMap(맵의 왼쪽 끝 좌표,맵의 오른쪽 위끝 좌표)
 
     5. 길찾기 방법
-      FindPath 메소드 사용
+      AStar 클래스의 FindPath 메소드 사용
         사용방법 :
          (3번에서 생성한 변수이름).FindPath(출발좌표,도착좌표)
 
