@@ -142,7 +142,7 @@ public static class Astar
             AddOpenList(currentNode, currentNode.position + new Vector2Int(1, 0), endNode, ref openList, closeList);
             AddOpenList(currentNode, currentNode.position + new Vector2Int(-1, 0), endNode, ref openList, closeList);
 
-            if(currentNode.position == endNode.position) break;
+            if(Mathf.Abs(currentNode.position.x - endNode.position.x) <= 1 && Mathf.Abs(currentNode.position.y - endNode.position.y) <= 1) break;
 
             x++;
             if(x>100){
@@ -155,8 +155,8 @@ public static class Astar
 
         AstarNode endCurNode = currentNode;
         while(endCurNode != startNode) {
-            endCurNode = endCurNode.parentNode;
             path.Add(endCurNode.position);
+            endCurNode = endCurNode.parentNode;
         }
         path.Add(startNode.position);
         path.Reverse();
@@ -190,7 +190,7 @@ public static class Astar
             AddOpenList(currentNode, currentNode.position + new Vector2Int(1, 0), endNode, ref openList, closeList, layerMask);
             AddOpenList(currentNode, currentNode.position + new Vector2Int(-1, 0), endNode, ref openList, closeList, layerMask);
 
-            if(currentNode.position == endNode.position) break;
+            if(Mathf.Abs(currentNode.position.x - endNode.position.x) <= 1 && Mathf.Abs(currentNode.position.y - endNode.position.y) <= 1) break;
 
             x++;
             if(x>100){
@@ -203,8 +203,8 @@ public static class Astar
 
         AstarNode endCurNode = currentNode;
         while(endCurNode != startNode) {
-            endCurNode = endCurNode.parentNode;
             path.Add(endCurNode.position);
+            endCurNode = endCurNode.parentNode;
         }
         path.Add(startNode.position);
         path.Reverse();
