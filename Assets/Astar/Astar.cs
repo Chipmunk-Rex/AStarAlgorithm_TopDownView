@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class AstarNode
 {
-    public bool canPass;
     public AstarNode parentNode;
     public Vector2Int position;
     public int F{
@@ -29,7 +28,6 @@ public static class Astar
         List<Vector2Int> path = new();
         List<AstarNode> openList = new();
         List<AstarNode> closeList = new();
-        // if(Physics2D.Raycast(startPos.position, Vector2.zero, 0.1f).collider != null)    
 
         openList.Add(startNode);
         currentNode = startNode;
@@ -37,7 +35,7 @@ public static class Astar
         while(openList.Count > 0){//마지막 위치가 도착지점이 될때까지 실행
             currentNode = openList[0];
             foreach(AstarNode node in openList){
-                if(currentNode.G +currentNode.H >= node.G + node.H &&currentNode.H > node.H)
+                if(currentNode.F > node.F)
                     currentNode = node;
             }
             openList.Remove(currentNode);
@@ -51,10 +49,9 @@ public static class Astar
             if(currentNode.position == endNode.position) break;
 
             x++;
-            if(x>100){
+            if(x>300){
+                Debug.LogError("Astar : 오류 발생 (300회 이상 반복됨) ");
                 return null;
-                // break;
-                // throw new Exception("오류 발생 (100회 이상 반복됨)");
             } 
         }
 
@@ -83,7 +80,7 @@ public static class Astar
         while(openList.Count > 0){//마지막 위치가 도착지점이 될때까지 실행
             currentNode = openList[0];
             foreach(AstarNode node in openList){
-                if(currentNode.G +currentNode.H >= node.G + node.H &&currentNode.H > node.H)
+                if(currentNode.F >= node.F && currentNode.H > node.H)
                     currentNode = node;
             }
             openList.Remove(currentNode);
@@ -97,11 +94,10 @@ public static class Astar
             if(currentNode.position == endNode.position) break;
 
             x++;
-            if(x>100){
+            if(x>300){
+                Debug.LogError("Astar : 오류 발생 (300회 이상 반복됨) ");
                 return null;
-                // break;
-                // throw new Exception("오류 발생 (100회 이상 반복됨)");
-            }
+            } 
         }
 
         AstarNode endCurNode = currentNode;
@@ -145,9 +141,9 @@ public static class Astar
             if(Mathf.Abs(currentNode.position.x - endNode.position.x) <= 1 && Mathf.Abs(currentNode.position.y - endNode.position.y) <= 1) break;
 
             x++;
-            if(x>100){
+            if(x>300){
+                Debug.LogError("Astar : 오류 발생 (300회 이상 반복됨) ");
                 return null;
-                // throw new Exception("오류 발생 (100회 이상 반복됨)");
             } 
 
             Debug.Log(openList.Count);
@@ -193,9 +189,9 @@ public static class Astar
             if(Mathf.Abs(currentNode.position.x - endNode.position.x) <= 1 && Mathf.Abs(currentNode.position.y - endNode.position.y) <= 1) break;
 
             x++;
-            if(x>100){
+            if(x>300){
+                Debug.LogError("Astar : 오류 발생 (300회 이상 반복됨) ");
                 return null;
-                // throw new Exception("오류 발생 (100회 이상 반복됨)");
             } 
 
             Debug.Log(openList.Count);
@@ -216,7 +212,7 @@ public static class Astar
     static ref List<AstarNode> AddOpenList(AstarNode currentNode, Vector2Int checkPos, AstarNode endNode, ref List<AstarNode> openList, List<AstarNode> closeList){
         AstarNode newNode = new AstarNode(checkPos);
         if(Physics2D.Raycast(checkPos, Vector2.zero, 0.1f).collider == null)
-            if(!closeList.Contains(newNode)){
+            if(closeList.Find(node => node.position == checkPos) == null && openList.Find(node => node.position == checkPos) == null){
                 int G = currentNode.G + 1;
                 int H = Mathf.Abs(endNode.position.x - checkPos.x) + Mathf.Abs(endNode.position.y - checkPos.y);
                 newNode.G = G;
@@ -229,7 +225,7 @@ public static class Astar
     static ref List<AstarNode> AddOpenList(AstarNode currentNode, Vector2Int checkPos, AstarNode endNode, ref List<AstarNode> openList, List<AstarNode> closeList, LayerMask layerMask){
         AstarNode newNode = new AstarNode(checkPos);
         if(Physics2D.Raycast(checkPos, Vector2.zero, 0.1f, layerMask).collider == null)
-            if(!closeList.Contains(newNode)){
+            if(closeList.Find(node => node.position == checkPos) == null && openList.Find(node => node.position == checkPos) == null){
                 int G = currentNode.G + 1;
                 int H = Mathf.Abs(endNode.position.x - checkPos.x) + Mathf.Abs(endNode.position.y - checkPos.y);
                 newNode.G = G;
